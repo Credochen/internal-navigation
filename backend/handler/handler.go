@@ -218,8 +218,12 @@ func (h *Handler) checkAll() {
 		wg.Add(1)
 		go func(id uint, url string) {
 			defer wg.Done()
+			req, err := http.NewRequest("HEAD", url, nil)
+			if err != nil {
+				h.online.Store(id, false)
+				return
+			}
 			client := &http.Client{Timeout: 5 * time.Second}
-			req, _ := http.NewRequest("HEAD", url, nil)
 			resp, err := client.Do(req)
 			online := err == nil && resp.StatusCode < 500
 			if resp != nil {
