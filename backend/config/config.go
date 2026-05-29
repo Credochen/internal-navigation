@@ -1,0 +1,26 @@
+package config
+
+import (
+	"os"
+)
+
+type Config struct {
+	AdminToken string
+	DBPath     string
+	Port       string
+}
+
+func Load() *Config {
+	return &Config{
+		AdminToken: getEnv("ADMIN_TOKEN", "admin123"),
+		DBPath:     getEnv("DB_PATH", "nav.db"),
+		Port:       getEnv("PORT", "8080"),
+	}
+}
+
+func getEnv(key, fallback string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return fallback
+}

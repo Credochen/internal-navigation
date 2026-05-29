@@ -1,0 +1,25 @@
+[Unit]
+Description=Internal Navigation Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/internal-navigation
+WorkingDirectory=/var/lib/internal-navigation
+Restart=on-failure
+RestartSec=5s
+
+# Environment variables
+Environment="PORT=8080"
+Environment="ADMIN_TOKEN=changeme"
+Environment="DB_PATH=/var/lib/internal-navigation/nav.db"
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/internal-navigation
+
+[Install]
+WantedBy=multi-user.target
